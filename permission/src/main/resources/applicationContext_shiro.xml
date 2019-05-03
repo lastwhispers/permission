@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- shiro的过滤工厂，相当默认的加载了9个过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 安全管理器，shiro核心组件(大脑) Facade模式 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 用户如果没有登陆，当他在访问资源的时候，就会自动跳转到登陆的页面 -->
+		<property name="loginUrl" value="/login.html" />
+		<!-- 当用户没有访问某项资源权限的时候，跳转到该页面 -->
+		<property name="unauthorizedUrl" value="/error.html" />
+		<property name="successUrl" value="/index.html"/>
+		<!-- 过滤链的定义：定义URL访问的时候对应的认证或授权时处理的过滤器 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/error.html = anon
+				/login.html = anon
+				/index.html = anon
+				
+				/user.html = perms["用户管理"]
+				/user/user* = perms["用户管理"]
+				/role.html = perms["角色管理"]
+				/role/role* = perms["角色管理"]
+				/menu.html = perms["菜单管理"]
+				/menu/menu* = perms["菜单管理"]
+				/roleMenuSet.html = perms["角色权限管理"]
+				/role/findRoleMenuByRoleid = perms["角色权限管理"]
+				/role/role/updateRoleMenu = perms["角色权限管理"]
+				/userRoleSet.html = perms["用户角色管理"]
+				/user/findUserRole = perms["用户角色管理"]
+				/user/updateUserRole = perms["用户角色管理"]
+				/log.html = perms["日志管理"]
+				/log/* = perms["日志管理"]
+				/druid/index.html = perms["数据库监控"]
+				
+				/dept.html = perms["部门"]
+				/emp.html = perms["员工"]
+				
+				/sale.html = perms["销售额统计"]
+				
+				/casual.html = perms["临时工计件"]
+				
+				/*.html = authc
+				/menu/* = authc
+				/*=authc
+			</value>
+		</property>
+	</bean>
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="realm"></property>
+	</bean>
+	<!-- 自定义的realm -->
+	<bean id="realm" class="cn.lastwhisper.core.shiro.Realm"/>
+	
+	<!-- 启动shiro注解 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+			depends-on="lifecycleBeanPostProcessor" >
+		<!-- 默认使用JDK代理 ，如被代理类没有实现接口，必须使用下列配置开启 cglib代理  -->
+		<property name="proxyTargetClass" value="true" />
+	</bean>	
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	
+	<!-- 对安全管理器 增强代码 ， spring 后处理器 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/> 
+</beans>

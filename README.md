@@ -1,4 +1,5 @@
->该项目源码地址：
+>该项目源码地址：https://github.com/ggb2312/permission
+项目在线地址：http://47.100.54.177:8080/permission/login.html
 
 #  1. 简介
 基于SSM框架简单的后台管理系统，整合spring + springmvc + shiro + mybatis + esayui。包含许多基础模块（用户管理、角色管理、菜单管理、角色权限管理、用户角色管理、日志管理、数据库监控）。

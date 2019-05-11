@@ -1,5 +1,11 @@
->该项目源码地址：https://github.com/ggb2312/permission  
+>该项目源码地址：https://github.com/ggb2312/permission
 项目在线地址：http://47.100.54.177:8080/permission/login.html
+初始用户/密码：
+系统管理员：admin/admin
+经理：manager/manager
+销售主管：salemanager/salemanager
+销售员：saler/saler
+临时工：casual/casual
 
 #  1. 简介
 基于SSM框架简单的后台管理系统，整合spring + springmvc + shiro + mybatis + esayui。包含许多基础模块（用户管理、角色管理、菜单管理、角色权限管理、用户角色管理、日志管理、数据库监控）。
@@ -132,8 +138,8 @@
 
 ![系统权限](https://upload-images.jianshu.io/upload_images/5336514-9afdb6918b86d639.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-通过用户对应的角色加载角色对应的菜单。并集成shiro做后端鉴权。
-由于shiro鉴权每次都要查询数据库，所以使用redis缓存菜单信息。
+通过用户对应的角色加载角色对应的菜单。
+集成shiro做后端url级别鉴权、方法级别鉴权，甚至方法内的鉴权。由于shiro鉴权每次都要查询数据库，所以使用redis缓存菜单信息。
 
 # 4. 日志系统设计思路
 

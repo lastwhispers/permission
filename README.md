@@ -1,10 +1,10 @@
 >该项目源码地址：https://github.com/ggb2312/permission
 项目在线地址：http://47.100.54.177:8080/permission/login.html
-初始用户/密码：
-系统管理员：admin/admin
-经理：manager/manager
-销售主管：salemanager/salemanager
-销售员：saler/saler
+初始用户：  
+系统管理员：admin/admin   
+经理：manager/manager  
+销售主管：salemanager/salemanager  
+销售员：saler/saler  
 临时工：casual/casual
 
 #  1. 简介

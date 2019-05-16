@@ -1,6 +1,8 @@
 package cn.lastwhisper.modular.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import cn.lastwhisper.core.annotation.LogAnno;
 import cn.lastwhisper.core.util.EasyUIDataGridResult;
 import cn.lastwhisper.core.util.EasyUIOptionalTreeNode;
 import cn.lastwhisper.core.util.GlobalResult;
 import cn.lastwhisper.core.util.UserUtils;
+import cn.lastwhisper.modular.pojo.Log;
 import cn.lastwhisper.modular.pojo.User;
+import cn.lastwhisper.modular.service.LogService;
 import cn.lastwhisper.modular.service.UserService;
 
 /**
@@ -35,6 +40,8 @@ import cn.lastwhisper.modular.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LogService logService;
 
 	/**
 	 * 
@@ -54,6 +61,14 @@ public class UserController {
 			Subject subject = SecurityUtils.getSubject();
 			// 3.执行login方法
 			subject.login(token);
+			// 4.登录日志记录
+			Log log = new Log();
+			log.setOperatedate(new Date());
+			log.setOperateor(user_code);
+			log.setOperateresult("正常");
+			log.setOperatetype("登录");
+			log.setIp(UserUtils.getIpAddress());
+			logService.addLog(log);
 			return GlobalResult.build(200, "");
 //			User user = userService.findUserByCodeAndPwd(user_code, user_pwd);
 //			if (user != null) {
@@ -65,6 +80,9 @@ public class UserController {
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			return GlobalResult.build(400, "账号或密码错误");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return GlobalResult.build(500, "服务端错误");
 		}
 	}
 
@@ -124,14 +142,15 @@ public class UserController {
 	public GlobalResult userupdate(User user) {
 		return userService.updateUser(user);
 	}
-	
+
 	@RequestMapping(value = "/user/updatePwd", method = RequestMethod.POST)
 	@ResponseBody
-	public GlobalResult updatePwd(String oldPwd,String newPwd) {
+	public GlobalResult updatePwd(String oldPwd, String newPwd) {
 		User user = UserUtils.getSubjectUser();
-		GlobalResult result = userService.updatePwd(user,oldPwd,newPwd);
-		//密码修改完成后移除当前用户
-		UserUtils.removeSubjectUser();;
+		GlobalResult result = userService.updatePwd(user, oldPwd, newPwd);
+		// 密码修改完成后移除当前用户
+		UserUtils.removeSubjectUser();
+		;
 		return result;
 	}
 
@@ -181,39 +200,52 @@ public class UserController {
 		GlobalResult result = userService.updateUserRole(user_id, checkedIds);
 		return result;
 	}
-	
+
 	/**
 	 * 
-	* @Title: showName 
-	* @Description: 显示用户名 
-	* @return GlobalResult
-	* @author gj
-	* @date 2019年2月21日下午12:02:45
+	 * @Title: showName
+	 * @Description: 显示用户名
+	 * @return GlobalResult
+	 * @author gj
+	 * @date 2019年2月21日下午12:02:45
 	 */
 	@RequestMapping(value = "/user/showName")
 	@ResponseBody
 	public GlobalResult showName() {
 		GlobalResult result = null;
-		if(UserUtils.getSubjectUser() == null) {
+		if (UserUtils.getSubjectUser() == null) {
 			result = GlobalResult.build(400, "用户未登录");
-		}else {
+		} else {
 			result = GlobalResult.build(200, UserUtils.getSubjectUser().getUser_name());
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 
-	* @Title: logout 
-	* @Description: 登出 
-	* @return Map
-	* @author gj
-	* @date 2019年2月21日下午1:02:53
+	 * @Title: logout
+	 * @Description: 登出
+	 * @return Map
+	 * @author gj
+	 * @date 2019年2月21日下午1:02:53
 	 */
 	@RequestMapping(value = "/user/logout")
 	@ResponseBody
 	public String logout() {
-		UserUtils.removeSubjectUser();;
+		// 登录日志记录
+		Log log = new Log();
+		log.setOperatedate(new Date());
+		log.setOperateor(UserUtils.getSubjectUser().getUser_code());
+		log.setOperateresult("正常");
+		log.setOperatetype("注销");
+		log.setIp(UserUtils.getIpAddress());
+		try {
+			logService.addLog(log);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		UserUtils.removeSubjectUser();
 		return null;
 	}
 
@@ -226,7 +258,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/user/userexport", method = RequestMethod.POST)
 	@ResponseBody
-	public void userexport(User user,HttpServletResponse response) {
+	public void userexport(User user, HttpServletResponse response) {
 		String filename = "Users_exportBy" + UserUtils.getSubjectUser().getUser_name() + ".xls";
 		// 响应对象
 		try {
@@ -239,11 +271,12 @@ public class UserController {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 
-	 * @Title: userdoImport   
+	 * @Title: userdoImport
 	 * @Description: 导入用户信息excel
-	 * @author: 最后的轻语_dd43    
+	 * @author: 最后的轻语_dd43
 	 * @return
 	 */
 	@RequestMapping(value = "/user/userdoImport", method = RequestMethod.POST)
@@ -251,10 +284,10 @@ public class UserController {
 	public GlobalResult userdoImport(MultipartFile file) {
 		try {
 			userService.doImport(file.getInputStream());
-			return new GlobalResult(200,"文件上传成功",null);
+			return new GlobalResult(200, "文件上传成功", null);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new GlobalResult(400,"文件上传失败",null);
+			return new GlobalResult(400, "文件上传失败", null);
 		}
 	}
 }

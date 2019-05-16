@@ -1,0 +1,14 @@
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:10 +0800] "GET /permission HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:10 +0800] "GET /permission/ HTTP/1.1" 302 - http-bio-8080-exec-3 57
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:10 +0800] "GET /permission/login.html;jsessionid=996A40D1314EA7320E0DB95F1A1138AB HTTP/1.1" 200 2589 http-bio-8080-exec-2 20
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:10 +0800] "GET /permission/login.html;jsessionid=996A40D1314EA7320E0DB95F1A1138AB HTTP/1.1" 200 2589 http-bio-8080-exec-4 20
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:10 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-6 0
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:16 +0800] "POST /permission/user/login HTTP/1.1" 200 56 http-bio-8080-exec-7 4976
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:16 +0800] "GET /permission/user/showName HTTP/1.1" 200 77 http-bio-8080-exec-5 5
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:17 +0800] "POST /permission/menu/loadMenus HTTP/1.1" 200 1323 http-bio-8080-exec-8 314
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:45 +0800] "GET /permission/user/logout HTTP/1.1" 200 - http-bio-8080-exec-10 1
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:33:45 +0800] "GET /permission/login.html HTTP/1.1" 200 2589 http-bio-8080-exec-10 2
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:35:20 +0800] "POST /permission/user/login HTTP/1.1" 200 56 http-bio-8080-exec-1 1291
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:35:21 +0800] "GET /permission/user/showName HTTP/1.1" 200 77 http-bio-8080-exec-3 44
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:35:21 +0800] "POST /permission/menu/loadMenus HTTP/1.1" 200 1323 http-bio-8080-exec-2 141
+0:0:0:0:0:0:0:1 - - [17/May/2019:07:35:23 +0800] "GET /permission/user/logout HTTP/1.1" 200 - http-bio-8080-exec-5 154

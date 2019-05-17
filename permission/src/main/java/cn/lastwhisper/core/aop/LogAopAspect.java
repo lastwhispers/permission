@@ -56,8 +56,8 @@ public class LogAopAspect {
 
 		// 当前登录的用户
 		User user = UserUtils.getSubjectUser();
-		// 设置操作人
-		log.setOperateor(user.getUser_name());
+		// 设置操作人账号
+		log.setOperateor(user.getUser_code());
 		String ip = UserUtils.getIpAddress();
 		log.setIp(ip);
 		Object result = null;

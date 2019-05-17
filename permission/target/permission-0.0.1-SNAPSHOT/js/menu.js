@@ -48,7 +48,14 @@ $(function() {
 			var rowData = $('#grid').datagrid('getData').rows[0];
 			switch (item.text) {
 			case '添加':
-				$("#insertDlg").dialog('open');
+				// 获取当前被选中的节点
+				var selected = $('#tt').tree('getSelected');
+				var children = selected.children;
+				if(children.length==0){
+					$.messager.alert("提示", "该菜单目录暂时不支持三级以上的菜单", 'warning');
+				}else{
+					$("#insertDlg").dialog('open');
+				}
 				break;
 			case '修改':
 				$("#updateDlg").dialog('open');
@@ -202,7 +209,13 @@ function loadDataGrid(menuid) {
 			text : '添加',
 			handler : function() {
 				// 打开添加窗口
-				$("#insertDlg").dialog('open');
+				var selected = $('#tt').tree('getSelected');
+				var children = selected.children;
+				if(children.length==0){
+					$.messager.alert("提示", "该菜单目录暂时不支持三级以上的菜单", 'warning');
+				}else{
+					$("#insertDlg").dialog('open');
+				}
 			}
 		}, '-', {
 			iconCls : 'icon-save',

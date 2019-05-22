@@ -195,6 +195,7 @@ public class MenuServiceImpl implements MenuService {
 			jedis.set("menusEasyui_" + userid, JSON.toJSONString(menu));
 		} else {
 			menu = JSON.parseObject(easyuiMenusJson, Menu.class);
+//			menu = JSON.parseArray(easyuiMenusJson, Menu.class).get(0);
 			System.out.println("从缓存读取");
 		}
 		return menu;

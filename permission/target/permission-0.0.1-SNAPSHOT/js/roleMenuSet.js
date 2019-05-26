@@ -28,7 +28,7 @@ $(function() {
 		loading : true,//显示载入状态。
 		loadMsg : '数据加载中...',// 在从远程站点加载数据的时候显示提示消息。
 		pageNumber : 1,// 在设置分页属性的时候初始化页码。
-		pageSize : 10,// 在设置分页属性的时候初始化页面大小。
+		pageSize : 50,// 在设置分页属性的时候初始化页面大小。
 		pageList : [ 10, 20, 30, 40, 50 ],//在设置分页属性的时候 初始化页面大小选择列表。
 	    onClickRow:function(rowIndex, rowData){
 	    	$('#tree').tree({    

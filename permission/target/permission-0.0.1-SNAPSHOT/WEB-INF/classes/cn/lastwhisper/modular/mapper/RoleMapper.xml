@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test='name!=null'>
 			where
 			<if test='name!=null'>
-				name LIKE '%${name}%'
+				name LIKE CONCAT('%',#{name},'%' )
 			</if>
 		</if>
 	</select>
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="java.lang.String" resultType="role">
 		select name from role
 		where
-		name like '%${name}%'
+		name like CONCAT('%',#{name},'%' )
 	</select>
 	<!-- 查询结束 -->
 

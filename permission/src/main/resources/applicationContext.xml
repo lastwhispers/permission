@@ -47,8 +47,8 @@
 		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
 		<property name="poolPreparedStatements" value="true" />
 		<property name="maxOpenPreparedStatements" value="20" />
-		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
-		<property name="filters" value="stat" />
+		<!-- 配置监控统计拦截的filters,和防sql注入 -->
+		<property name="filters" value="stat,wall" />
 	</bean>
 
 	<!-- sqlSessinFactory -->

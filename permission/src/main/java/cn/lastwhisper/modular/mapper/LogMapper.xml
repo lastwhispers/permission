@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from log 
 		<if test="operateor!=null">
 			where 
-			operateor like '%${operateor}%' 
+			operateor like CONCAT('%',#{operateor},'%' )
 		</if>
 	</select>
 
@@ -18,8 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="log">
 		select distinct operateor from log 
 		where 
-		operateor like 
-		'%${operateor}%' 
+		operateor like CONCAT('%',#{operateor},'%' )
 	</select>
 
 	<insert id="insertLog" parameterType="int">

@@ -29,8 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="user">
 		select user_name from user
 		where
-		user_name like
-		'%${user_name}%'
+		user_name like concat('%', #{user_name}, '%') 
 	</select>
 	<!-- 查询用户对应的角色id -->
 	<select id="selectUserRole" resultType="role">

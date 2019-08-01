@@ -30,6 +30,7 @@ import cn.lastwhisper.modular.mapper.MenuMapper;
 import cn.lastwhisper.modular.pojo.Menu;
 import cn.lastwhisper.modular.service.MenuService;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * @ClassName: MenuServiceImpl
@@ -46,8 +47,10 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private MenuMapper menuMapper;
 
+//	@Autowired
+//	private Jedis jedis;
 	@Autowired
-	private Jedis jedis;
+	private JedisPool jedisPool;
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	@Override
@@ -128,6 +131,7 @@ public class MenuServiceImpl implements MenuService {
 	 * @return
 	 */
 	private void batchDel(String key) {
+		Jedis jedis = jedisPool.getResource();
 		try {
 			Set<String> set = jedis.keys(key + "*");
 			Iterator<String> it = set.iterator();
@@ -136,6 +140,8 @@ public class MenuServiceImpl implements MenuService {
 				jedis.del(keyStr);
 			}
 		} catch (Exception e) {
+		}finally {
+			if(jedis!=null)jedis.close();
 		}
 	}
 
@@ -160,71 +166,81 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public Menu findMenuByUserid(Integer userid) {
 		// 从缓存中读取数据
-		String easyuiMenusJson = jedis.get("menusEasyui_" + userid);
-		Menu menu = null;
-		if (easyuiMenusJson == null) {
-			// 获取根菜单
-			List<Menu> root = menuMapper.selectMenu("-1");
-			// 用户下的菜单集合 找数据库
-//			List<Menu> userMenus = menuMapper.selectMenuByUserid(userid);
-			// 用户下的菜单集合 找缓存
-			List<Menu> userMenus = findMenuListByUserid(userid);
-			// 根菜单
-			menu = cloneMenu(root.get(0));
-			// 暂存一级菜单
-			Menu _m1 = null;
-			// 暂存二级菜单
-			Menu _m2 = null;
-			// 获取全部的一级菜单
-			List<Menu> parentMenus = menuMapper.selectMenu("0");
-			// 循环一级菜单
-			for (Menu m1 : parentMenus) {
-				_m1 = cloneMenu(m1);
-				// 获取当前一级菜单的所有二级菜单
-				List<Menu> leafMenus = menuMapper.selectMenu(_m1.getMenuid());
-				// 循环匹配二级菜单
-				for (Menu m2 : leafMenus) {
-					for (Menu userMenu : userMenus) {
-						if (userMenu.getMenuid().equals(m2.getMenuid())) {
-							// 将二级菜单加入一级菜单
-							_m2 = cloneMenu(m2);
-							_m1.getMenus().add(_m2);
+		Jedis jedis = jedisPool.getResource();
+		Menu menu;
+		try {
+			String easyuiMenusJson = jedis.get("menusEasyui_" + userid);
+			menu = null;
+			if (easyuiMenusJson == null) {
+				// 获取根菜单
+				List<Menu> root = menuMapper.selectMenu("-1");
+				// 用户下的菜单集合 找数据库
+				//			List<Menu> userMenus = menuMapper.selectMenuByUserid(userid);
+				// 用户下的菜单集合 找缓存
+				List<Menu> userMenus = findMenuListByUserid(userid);
+				// 根菜单
+				menu = cloneMenu(root.get(0));
+				// 暂存一级菜单
+				Menu _m1 = null;
+				// 暂存二级菜单
+				Menu _m2 = null;
+				// 获取全部的一级菜单
+				List<Menu> parentMenus = menuMapper.selectMenu("0");
+				// 循环一级菜单
+				for (Menu m1 : parentMenus) {
+					_m1 = cloneMenu(m1);
+					// 获取当前一级菜单的所有二级菜单
+					List<Menu> leafMenus = menuMapper.selectMenu(_m1.getMenuid());
+					// 循环匹配二级菜单
+					for (Menu m2 : leafMenus) {
+						for (Menu userMenu : userMenus) {
+							if (userMenu.getMenuid().equals(m2.getMenuid())) {
+								// 将二级菜单加入一级菜单
+								_m2 = cloneMenu(m2);
+								_m1.getMenus().add(_m2);
+							}
 						}
 					}
+					// 有二级菜单我们才加进来
+					if (_m1.getMenus().size() > 0) {
+						// 把一级菜单加入到根菜单下
+						menu.getMenus().add(_m1);
+					}
 				}
-				// 有二级菜单我们才加进来
-				if (_m1.getMenus().size() > 0) {
-					// 把一级菜单加入到根菜单下
-					menu.getMenus().add(_m1);
-				}
-			}
-			logger.debug("从数据库读取，设置缓存");
-//			System.out.println("从数据库读取，设置缓存");
-			jedis.set("menusEasyui_" + userid, JSON.toJSONString(menu));
-		} else {
-			menu = JSON.parseObject(easyuiMenusJson, Menu.class);
-//			menu = JSON.parseArray(easyuiMenusJson, Menu.class).get(0);
-//			System.out.println("从缓存读取");
-			logger.debug("从缓存读取");
+				logger.debug("从数据库读取，设置缓存");
+				//			System.out.println("从数据库读取，设置缓存");
+				jedis.set("menusEasyui_" + userid, JSON.toJSONString(menu));
+			} else {
+				menu = JSON.parseObject(easyuiMenusJson, Menu.class);
+				//			menu = JSON.parseArray(easyuiMenusJson, Menu.class).get(0);
+				//			System.out.println("从缓存读取");
+				logger.debug("从缓存读取");
+			} 
+		} finally {
+			if(jedis!=null)jedis.close();
 		}
 		return menu;
 	}
 
 	@Override
 	public List<Menu> findMenuListByUserid(Integer userid) {
-		String menuListJson = jedis.get("menusList_" + userid);
-		List<Menu> menuList = null;
-		if (menuListJson == null) {
-			// 1.从数据库中查出来，放入缓存中
-			menuList = menuMapper.selectMenuByUserid(userid);
-			jedis.set("menusList_" + userid, JSON.toJSONString(menuList));
-			logger.debug("从数据库中查询menuList");
-//			System.out.println("从数据库中查询menuList");
-		} else {
-			// 2.直接从缓存中拿
-			logger.debug("从缓存中查询menuList"+menuListJson);
-			menuList = JSON.parseArray(menuListJson, Menu.class);
-//			System.out.println("从缓存中查询menuList");
+		Jedis jedis = jedisPool.getResource();
+		List<Menu> menuList;
+		try {
+			String menuListJson = jedis.get("menusList_" + userid);
+			menuList = null;
+			if (menuListJson == null) {
+				// 1.从数据库中查出来，放入缓存中
+				menuList = menuMapper.selectMenuByUserid(userid);
+				jedis.set("menusList_" + userid, JSON.toJSONString(menuList));
+				logger.debug("从数据库中查询menuList");
+			} else {
+				// 2.直接从缓存中拿
+				logger.debug("从缓存中查询menuList" + menuListJson);
+				menuList = JSON.parseArray(menuListJson, Menu.class);
+			} 
+		} finally {
+			if(jedis!=null)jedis.close();
 		}
 		return menuList;
 	}

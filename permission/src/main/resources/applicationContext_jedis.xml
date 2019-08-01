@@ -5,8 +5,24 @@
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="jedis" class="redis.clients.jedis.Jedis">
-		<constructor-arg index="0" value="127.0.0.1"></constructor-arg>
+<!-- 	<bean id="jedis" class="redis.clients.jedis.Jedis" > -->
+<!-- 		<constructor-arg index="0" value="127.0.0.1"></constructor-arg> -->
+<!-- 	</bean> -->
+	<!--JedisPool这个bean的构造方法需要多个参数-->
+	<bean class="redis.clients.jedis.JedisPool" id="jedisPool" >
+		<constructor-arg name="host" value="${redis.host}"></constructor-arg>
+		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
+		<constructor-arg name="password" value="${redis.password}"></constructor-arg>
+		<constructor-arg name="timeout" value="${redis.timeout}"></constructor-arg>
+		<constructor-arg name="database" value="${redis.database}"></constructor-arg>
+		<constructor-arg name="poolConfig" ref="jedisPoolConfig"></constructor-arg>
+	</bean>
+	<bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig">
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="maxTotal" value="${maxActive}" />
+		<property name="maxWaitMillis" value="${maxWait}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="blockWhenExhausted" value="${blockWhenExhausted}" />
 	</bean>
 </beans>
 	

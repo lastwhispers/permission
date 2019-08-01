@@ -34,6 +34,7 @@ import cn.lastwhisper.modular.pojo.Role;
 import cn.lastwhisper.modular.pojo.User;
 import cn.lastwhisper.modular.service.UserService;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * 
@@ -52,8 +53,11 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RoleMapper roleMapper;
+//	@Autowired
+//	private Jedis jedis;
+	
 	@Autowired
-	private Jedis jedis;
+	private JedisPool jedisPool;
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	@Override
@@ -126,19 +130,24 @@ public class UserServiceImpl implements UserService {
 	@RequiresPermissions("用户管理")
 	@Override
 	public GlobalResult deleteUser(Integer user_id) {
-		if (user_id == null) {
-			return new GlobalResult(400, "用户id为空，添加失败！", 400);
-		}
-		Integer integer = userMapper.deleteUserById(user_id);
-		if (integer == 0) {
-			return new GlobalResult(400, "用户删除失败", null);
-		} else {
-			// 删除用户下的所有角色
-			userMapper.deleteUserRole(user_id);
-			// 删除用户下的所有缓存
-			jedis.del("menusEasyui_" + user_id);
-			jedis.del("menusList_" + user_id);
-			return new GlobalResult(200, "用户删除成功", null);
+		Jedis jedis = jedisPool.getResource();
+		try {
+			if (user_id == null) {
+				return new GlobalResult(400, "用户id为空，添加失败！", 400);
+			}
+			Integer integer = userMapper.deleteUserById(user_id);
+			if (integer == 0) {
+				return new GlobalResult(400, "用户删除失败", null);
+			} else {
+				// 删除用户下的所有角色
+				userMapper.deleteUserRole(user_id);
+				// 删除用户下的所有缓存
+				jedis.del("menusEasyui_" + user_id);
+				jedis.del("menusList_" + user_id);
+				return new GlobalResult(200, "用户删除成功", null);
+			} 
+		} finally {
+			if(jedis!=null)jedis.close();
 		}
 	}
 
@@ -219,6 +228,7 @@ public class UserServiceImpl implements UserService {
 	@LogAnno(operateType = "更新用户对应角色")
 	@Override
 	public GlobalResult updateUserRole(Integer user_id, String checkedIds) {
+		Jedis jedis = jedisPool.getResource();
 		try {
 			// 先删除用户下的所有角色
 			userMapper.deleteUserRole(user_id);
@@ -235,6 +245,8 @@ public class UserServiceImpl implements UserService {
 			System.out.println("更新用户对应的角色 ，清除缓存");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (jedis!=null)jedis.close();
 		}
 		return GlobalResult.build(200, "保存成功");
 	}

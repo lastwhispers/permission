@@ -30,6 +30,7 @@ import cn.lastwhisper.modular.pojo.Menu;
 import cn.lastwhisper.modular.pojo.Role;
 import cn.lastwhisper.modular.service.RoleService;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * @ClassName: RoleServiceImpl
@@ -45,9 +46,11 @@ public class RoleServiceImpl implements RoleService {
 	private RoleMapper roleMapper;
 	@Autowired
 	private MenuMapper menuMapper;
+//	@Autowired
+//	private Jedis jedis;
 	@Autowired
-	private Jedis jedis;
-
+	private JedisPool jedisPool;
+	
 	@Transactional(propagation =Propagation.NOT_SUPPORTED)	
 	@Override
 	public EasyUIDataGridResult findRolelistByPage(Integer page, Integer rows, Role role) {
@@ -157,6 +160,7 @@ public class RoleServiceImpl implements RoleService {
 	@LogAnno(operateType = "更新角色对应权限菜单")
 	@Override
 	public GlobalResult updateRoleMenu(Integer roleuuid, String checkedIds) {
+		Jedis jedis = jedisPool.getResource();
 		try {
 			// 清空角色下的权限菜单
 			roleMapper.deleteMenuidByRoleid(roleuuid);
@@ -169,12 +173,15 @@ public class RoleServiceImpl implements RoleService {
 			}
 			List<Integer> useridList = roleMapper.selectUseridByRoleuuid(roleuuid);
 			for (Integer userid : useridList) {
+				
 				jedis.del("menusEasyui_" + userid);
 				jedis.del("menusList_" + userid);
 			}
 			System.out.println("更新角色对应的对应的权限菜单 ，清除缓存");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if(jedis!=null)jedis.close();
 		}
 		return GlobalResult.build(200, "权限设置成功");
 	}

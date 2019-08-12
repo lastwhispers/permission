@@ -1,73 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 						http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!-- shiro的过滤工厂，相当默认的加载了9个过滤器 -->
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-		<!-- 安全管理器，shiro核心组件(大脑) Facade模式 -->
-		<property name="securityManager" ref="securityManager" />
-		<!-- 用户如果没有登陆，当他在访问资源的时候，就会自动跳转到登陆的页面 -->
-		<property name="loginUrl" value="/login.html" />
-		<!-- 当用户没有访问某项资源权限的时候，跳转到该页面 -->
-		<property name="unauthorizedUrl" value="/error.html" />
-		<property name="successUrl" value="/index.html"/>
-		<!-- 过滤链的定义：定义URL访问的时候对应的认证或授权时处理的过滤器 -->
-		<property name="filterChainDefinitions">
-			<value>
-				/error.html = anon
-				/login.html = anon
-				/index.html = anon
-				
-				/user.html = perms["用户管理"]
-				/user/user* = perms["用户管理"]
-				/role.html = perms["角色管理"]
-				/role/role* = perms["角色管理"]
-				/menu.html = perms["菜单管理"]
-				/menu/menu* = perms["菜单管理"]
-				/roleMenuSet.html = perms["角色权限管理"]
-				/role/findRoleMenuByRoleid = perms["角色权限管理"]
-				/role/role/updateRoleMenu = perms["角色权限管理"]
-				/userRoleSet.html = perms["用户角色管理"]
-				/user/findUserRole = perms["用户角色管理"]
-				/user/updateUserRole = perms["用户角色管理"]
-				/log.html = perms["日志管理"]
-				/log/* = perms["日志管理"]
-				/druid/index.html = perms["数据库监控"]
-				
-				/dept.html = perms["部门"]
-				/emp.html = perms["员工"]
-				
-				/sale.html = perms["销售额统计"]
-				
-				/casual.html = perms["临时工计件"]
-				
-				/*.html = authc
-				/menu/* = authc
-				/*=authc
-			</value>
-		</property>
-	</bean>
-	<!-- 安全管理器 -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realm" ref="realm"></property>
-	</bean>
-	<!-- 自定义的realm -->
-	<bean id="realm" class="cn.lastwhisper.core.shiro.Realm"/>
-	
-	<!-- 启动shiro注解 -->
-	<bean
-		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-			depends-on="lifecycleBeanPostProcessor" >
-		<!-- 默认使用JDK代理 ，如被代理类没有实现接口，必须使用下列配置开启 cglib代理  -->
-		<property name="proxyTargetClass" value="true" />
-	</bean>	
-	<bean
-		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-		<property name="securityManager" ref="securityManager" />
-	</bean>
-	
-	<!-- 对安全管理器 增强代码 ， spring 后处理器 -->
-	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/> 
+    <description>configuration informations about Shiro</description>
+
+    <!-- 配置shiroFilter:这里的id名(shiroFilter)要和web.xml配置的名字保持一致哟 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 关联安全过滤器 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 指定Shiro默认的登录请求,默认: http://localhost:8080/login.jsp -->
+        <property name="loginUrl" value="/login.html"/>
+        <!-- 指定用户未授权操作提示页 -->
+        <property name="unauthorizedUrl" value="/error.html"/>
+        <!-- 指定用户成功登录后的主页 -->
+        <property name="successUrl" value="/index.html"/>
+        <!-- 定义过虑器链:定义URL访问的时候对应的认证或授权时处理的过滤器,从上向下顺序执行,一般将/**放在最下边 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 静态资源可以匿名访问 -->
+                /error.html = anon
+                /login.html = anon
+                /index.html = anon
+                <!-- 权限过滤:用户管理 -->
+                /user.html = perms["用户管理"]
+                /user/user* = perms["用户管理"]
+                <!-- 权限过滤:角色管理 -->
+                /role.html = perms["角色管理"]
+                /role/role* = perms["角色管理"]
+                <!-- 权限过滤:菜单管理 -->
+                /menu.html = perms["菜单管理"]
+                /menu/menu* = perms["菜单管理"]
+                <!-- 权限过滤:角色权限管理 -->
+                /roleMenuSet.html = perms["角色权限管理"]
+                /role/findRoleMenuByRoleid = perms["角色权限管理"]
+                /role/role/updateRoleMenu = perms["角色权限管理"]
+                <!-- 权限过滤:用户角色管理 -->
+                /userRoleSet.html = perms["用户角色管理"]
+                /user/findUserRole = perms["用户角色管理"]
+                /user/updateUserRole = perms["用户角色管理"]
+                <!-- 权限过滤:日志管理 -->
+                /log.html = perms["日志管理"]
+                /log/* = perms["日志管理"]
+                <!-- 权限管理:数据库监控 -->
+                /druid/index.html = perms["数据库监控"]
+                <!-- 权限管理:部门信息模块 -->
+                /dept.html = perms["部门"]
+                <!-- 权限管理:员工信息模块 -->
+                /emp.html = perms["员工"]
+                <!-- 权限管理:销售额统计模块 -->
+                /sale.html = perms["销售额统计"]
+                <!-- 权限管理:临时工计件模块 -->
+                /casual.html = perms["临时工计件"]
+                <!-- 所有资源的访问都需要身份认证 -->
+                /*.html = authc
+                /menu/* = authc
+                /*=authc
+            </value>
+        </property>
+    </bean>
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!-- 注入自定义Realm -->
+        <property name="realm" ref="realm"/>
+    </bean>
+
+    <!-- 自定义Realm -->
+    <bean id="realm" class="cn.lastwhisper.core.shiro.Realm"/>
+
+    <!-- 开启shiro注解模式:如果使用注解模式,必须采用cglib针对类进行代理 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <!-- 默认使用JDK代理,如被代理类没有实现接口,必须使用下列配置开启cglib代理  -->
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- Shiro生命周期处理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 </beans>

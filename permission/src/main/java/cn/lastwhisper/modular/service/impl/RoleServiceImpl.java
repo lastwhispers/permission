@@ -65,12 +65,14 @@ public class RoleServiceImpl implements RoleService {
 		// 3.返回分页的结果
 		return result;
 	}
+
 	@Transactional(propagation =Propagation.NOT_SUPPORTED)
 	@Override
 	public List<Role> findRoleName(String q) {
 		List<Role> list = roleMapper.selectRoleName(q);
 		return list;
 	}
+
 	@LogAnno(operateType = "删除角色")
 	@Override
 	public GlobalResult updateRole(Role role) {
@@ -123,11 +125,11 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public List<EasyUIOptionalTreeNode> findRoleMenuByRoleid(Integer roleuuid) {
+	public List<EasyUIOptionalTreeNode> findRoleMenuByRoleid(Integer roleUuid) {
 		// 1.根据角色id获取角色对应的菜单id
-		List<String> menuidList = roleMapper.selectRoleMenuidByRoleid(roleuuid);
+		List<String> menuIdList = roleMapper.selectRoleMenuidByRoleid(roleUuid);
 		// 2.获取一级菜单
-		List<Menu> Parentmenu = menuMapper.selectMenuIdName("0");
+		List<Menu> parentMenu = menuMapper.selectMenuIdName("0");
 		// 3.当前角色对象对应的菜单权限
 		List<EasyUIOptionalTreeNode> treeList = new ArrayList<EasyUIOptionalTreeNode>();
 		// 暂存一级菜单
@@ -135,19 +137,19 @@ public class RoleServiceImpl implements RoleService {
 		// 暂存二级菜单
 		EasyUIOptionalTreeNode t2 = null;
 		// 一级菜单遍历
-		for (Menu m1 : Parentmenu) {
+		for (Menu m1 : parentMenu) {
 			t1 = new EasyUIOptionalTreeNode();
 			t1.setId(m1.getMenuid());
 			t1.setText(m1.getMenuname());
-			List<Menu> leafmenu = menuMapper.selectMenuIdName(m1.getMenuid());
+			List<Menu> leafMenu = menuMapper.selectMenuIdName(m1.getMenuid());
 			// 二级菜单遍历
-			for (Menu m2 : leafmenu) {
+			for (Menu m2 : leafMenu) {
 				t2 = new EasyUIOptionalTreeNode();
 				t2.setId(m2.getMenuid());
 				t2.setText(m2.getMenuname());
 				// 如果角色下包含有这个权限菜单，让它勾选上
-				for (String menuid : menuidList) {
-					if (m2.getMenuid().equals(menuid)) {
+				for (String menuId : menuIdList) {
+					if (m2.getMenuid().equals(menuId)) {
 						t2.setChecked(true);
 					}
 				}
@@ -157,6 +159,8 @@ public class RoleServiceImpl implements RoleService {
 		}
 		return treeList;
 	}
+
+
 	@LogAnno(operateType = "更新角色对应权限菜单")
 	@Override
 	public GlobalResult updateRoleMenu(Integer roleuuid, String checkedIds) {
@@ -167,15 +171,15 @@ public class RoleServiceImpl implements RoleService {
 			// 权限角色id
 			if (checkedIds != null) {
 				String[] ids = checkedIds.split(",");
-				for (String menuuuid : ids) {
-					roleMapper.insertRolemenu(menuuuid, roleuuid);
+				for (String menuUuid : ids) {
+					roleMapper.insertRolemenu(menuUuid, roleuuid);
 				}
 			}
-			List<Integer> useridList = roleMapper.selectUseridByRoleuuid(roleuuid);
-			for (Integer userid : useridList) {
+			List<Integer> userIdList = roleMapper.selectUseridByRoleuuid(roleuuid);
+			for (Integer userId : userIdList) {
 				
-				jedis.del("menusEasyui_" + userid);
-				jedis.del("menusList_" + userid);
+				jedis.del("menusEasyui_" + userId);
+				jedis.del("menusList_" + userId);
 			}
 			System.out.println("更新角色对应的对应的权限菜单 ，清除缓存");
 		} catch (Exception e) {

@@ -38,7 +38,6 @@ public class RoleController {
 	 * 
 	* @Title: findRoleByEnble 
 	* @Description: 查询角色列表 
-	* @param enble
 	* @param page
 	* @param rows
 	* @return EasyUIDataGridResult

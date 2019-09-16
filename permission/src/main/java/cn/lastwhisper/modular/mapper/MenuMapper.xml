@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 根据userid加载对应菜单 -->
 	<select id="selectMenuByUserid" resultType="menu">
 		SELECT 
-			menu.menuid,menu.menuname,menu.url,menu.icon,menu.pid 
+			DISTINCT menu.menuid,menu.menuname,menu.url,menu.icon,menu.pid
 		FROM 
 			user_role,
 			role,

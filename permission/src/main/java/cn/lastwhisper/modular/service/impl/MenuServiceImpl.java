@@ -170,7 +170,6 @@ public class MenuServiceImpl implements MenuService {
 		Menu menu;
 		try {
 			String easyuiMenusJson = jedis.get("menusEasyui_" + userid);
-			menu = null;
 			if (easyuiMenusJson == null) {
 				// 获取根菜单
 				List<Menu> root = menuMapper.selectMenu("-1");

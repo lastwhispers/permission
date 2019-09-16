@@ -58,7 +58,6 @@ public class UserUtils {
 	/**
 	 * 获取IP地址的方法
 	 * 
-	 * @param request 传一个request对象下来
 	 * @return
 	 */
 	public static String getIpAddress() {

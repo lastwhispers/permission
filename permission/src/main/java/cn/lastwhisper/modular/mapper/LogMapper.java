@@ -1,11 +1,3 @@
-/**  
- * @Title:  LogMapper.java   
- * @Package cn.lastwhisper.modular.mapper   
- * @Description: TODO(用一句话描述该文件做什么)
- * @author: 最后的轻语_dd43     
- * @date:   2019年4月30日 下午9:42:54   
- * @version V1.0 
- */
 package cn.lastwhisper.modular.mapper;
 
 import java.util.List;

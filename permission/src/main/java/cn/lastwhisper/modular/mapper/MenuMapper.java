@@ -1,18 +1,10 @@
-/**  
- * @Title:  MenuMapper.java   
- * @Package cn.lastwhisper.mapper   
- * @Description: TODO(用一句话描述该文件做什么)
- * @author: 最后的轻语_dd43     
- * @date:   2019年4月6日 下午2:35:30   
- * @version V1.0 
- */
 package cn.lastwhisper.modular.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import cn.lastwhisper.core.util.Tree;
+import cn.lastwhisper.modular.vo.Tree;
 import cn.lastwhisper.modular.pojo.Menu;
 
 /**   

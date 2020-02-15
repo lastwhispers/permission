@@ -6,7 +6,7 @@
  * @date:   2019年4月6日 下午2:45:32   
  * @version V1.0 
  */
-package cn.lastwhisper.core.util;
+package cn.lastwhisper.modular.vo;
 
 import java.util.ArrayList;
 import java.util.List;

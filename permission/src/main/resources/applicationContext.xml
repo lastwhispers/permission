@@ -77,7 +77,7 @@
 	</bean>
 
 	<!-- 开启注解AOP -->
-	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<aop:aspectj-autoproxy/>
 	<!-- 注解方式配置事物，为了配合自定义注解 -->
 	<tx:annotation-driven
 		transaction-manager="transactionManager" proxy-target-class="true"

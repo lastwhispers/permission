@@ -3,7 +3,7 @@ package cn.lastwhisper.modular.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
 import cn.lastwhisper.modular.pojo.Log;
 
 /**

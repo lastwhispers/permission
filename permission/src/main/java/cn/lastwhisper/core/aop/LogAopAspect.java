@@ -68,7 +68,7 @@ public class LogAopAspect {
 			log.setOperateresult("正常");// 设置操作结果
 		} catch (SQLException e) {
 			// 3.相当于异常通知部分
-			log.setOperateresult("失败");// 设置操作结果
+			log.setOperateresult("异常");// 设置操作结果
 		} finally {
 			// 4.相当于最终通知
 			log.setOperatedate(new Date());// 设置操作日期

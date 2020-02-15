@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
-import cn.lastwhisper.core.util.EasyUIOptionalTreeNode;
-import cn.lastwhisper.core.util.GlobalResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIOptionalTreeNode;
+import cn.lastwhisper.modular.vo.GlobalResult;
 import cn.lastwhisper.modular.pojo.Role;
 import cn.lastwhisper.modular.pojo.User;
 

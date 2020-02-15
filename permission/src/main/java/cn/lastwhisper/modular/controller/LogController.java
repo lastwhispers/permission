@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
 import cn.lastwhisper.modular.pojo.Log;
 import cn.lastwhisper.modular.service.LogService;
 

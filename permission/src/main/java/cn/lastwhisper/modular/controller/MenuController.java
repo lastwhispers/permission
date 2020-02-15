@@ -10,13 +10,14 @@ package cn.lastwhisper.modular.controller;
 
 import java.util.List;
 
+import cn.lastwhisper.core.annotation.LogAnno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.lastwhisper.core.util.GlobalResult;
-import cn.lastwhisper.core.util.Tree;
+import cn.lastwhisper.modular.vo.GlobalResult;
+import cn.lastwhisper.modular.vo.Tree;
 import cn.lastwhisper.core.util.UserUtils;
 import cn.lastwhisper.modular.pojo.Menu;
 import cn.lastwhisper.modular.pojo.User;
@@ -64,6 +65,7 @@ public class MenuController {
 	 * @param menu 菜单对象
 	 * @return
 	 */
+	@LogAnno(operateType = "添加权限菜单")
 	@RequestMapping(value="/menu/menuadd")
 	@ResponseBody
 	public GlobalResult insert(Menu menu) {
@@ -77,6 +79,7 @@ public class MenuController {
 	 * @param menuid 主键
 	 * @return
 	 */
+	@LogAnno(operateType = "修改权限菜单")
 	@RequestMapping(value="/menu/menudelete")
 	@ResponseBody
 	public GlobalResult deleteById(String menuid) {
@@ -90,6 +93,7 @@ public class MenuController {
 	 * @param menu 菜单对象
 	 * @return
 	 */
+	@LogAnno(operateType = "更新权限菜单")
 	@RequestMapping(value="/menu/menuupdate")
 	@ResponseBody
 	public GlobalResult updateById(Menu menu) {

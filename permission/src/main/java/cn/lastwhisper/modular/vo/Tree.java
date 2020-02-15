@@ -1,4 +1,4 @@
-package cn.lastwhisper.core.util;
+package cn.lastwhisper.modular.vo;
 
 import java.util.ArrayList;
 import java.util.List;

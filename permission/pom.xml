@@ -9,6 +9,7 @@
 
 	<url>http://maven.apache.org</url>
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Spring版本号 -->
 		<spring.version>4.3.18.RELEASE</spring.version>
 		<jackson.version>2.9.9</jackson.version>
@@ -223,6 +224,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -233,23 +235,25 @@
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
 				<configuration>
 					<port>8080</port>
 					<path>/permission</path>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-war-plugin</artifactId>-->
+<!--				<version>2.6</version>-->
+<!--				<configuration>-->
+<!--					<failOnMissingWebXml>false</failOnMissingWebXml>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 			<!-- 配置打包时跳过测试 ，首次配置使用的时候会自动联网进行下载 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M4</version>
 				<configuration>
 					<skipTests>true</skipTests>
 				</configuration>

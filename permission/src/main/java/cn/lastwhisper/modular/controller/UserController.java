@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import cn.lastwhisper.core.annotation.LogAnno;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -19,10 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.lastwhisper.core.annotation.LogAnno;
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
-import cn.lastwhisper.core.util.EasyUIOptionalTreeNode;
-import cn.lastwhisper.core.util.GlobalResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIOptionalTreeNode;
+import cn.lastwhisper.modular.vo.GlobalResult;
 import cn.lastwhisper.core.util.UserUtils;
 import cn.lastwhisper.modular.pojo.Log;
 import cn.lastwhisper.modular.pojo.User;
@@ -70,13 +70,6 @@ public class UserController {
 			log.setIp(UserUtils.getIpAddress());
 			logService.addLog(log);
 			return GlobalResult.build(200, "");
-//			User user = userService.findUserByCodeAndPwd(user_code, user_pwd);
-//			if (user != null) {
-//				UserUtils.setSessionUser(user);
-//				return GlobalResult.build(200, "");
-//			} else {
-//				return GlobalResult.build(400, "账号或密码错误");
-//			}
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			return GlobalResult.build(400, "账号或密码错误");
@@ -124,6 +117,7 @@ public class UserController {
 	 * @param user 被添加的用户信息
 	 * @return
 	 */
+	@LogAnno(operateType = "添加用户")
 	@RequestMapping(value = "/user/useradd", method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult useradd(User user) {
@@ -137,12 +131,14 @@ public class UserController {
 	 * @param user 被修改的用户信息
 	 * @return
 	 */
+	@LogAnno(operateType = "更新用户")
 	@RequestMapping(value = "/user/userupdate", method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult userupdate(User user) {
 		return userService.updateUser(user);
 	}
 
+	@LogAnno(operateType = "更新密码")
 	@RequestMapping(value = "/user/updatePwd", method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult updatePwd(String oldPwd, String newPwd) {
@@ -161,6 +157,7 @@ public class UserController {
 	 * @param user 封装的条件
 	 * @return
 	 */
+	@LogAnno(operateType = "删除用户")
 	@RequestMapping(value = "/user/userdelete", method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult userdelete(User user) {
@@ -193,6 +190,7 @@ public class UserController {
 	 * @author gj
 	 * @date 2019年2月16日下午4:05:33
 	 */
+	@LogAnno(operateType = "更新用户对应角色")
 	@RequestMapping(value = "/user/updateUserRole", method = { RequestMethod.POST })
 	@ResponseBody
 	public GlobalResult updateUserRole(@RequestParam(value = "id", required = true) Integer user_id,
@@ -256,6 +254,7 @@ public class UserController {
 	 * @param user 封装的条件
 	 * @return
 	 */
+	@LogAnno(operateType = "导出用户信息Excel")
 	@RequestMapping(value = "/user/userexport", method = RequestMethod.POST)
 	@ResponseBody
 	public void userexport(User user, HttpServletResponse response) {
@@ -279,6 +278,7 @@ public class UserController {
 	 * @author: 最后的轻语_dd43
 	 * @return
 	 */
+	@LogAnno(operateType = "导入用户信息Excel")
 	@RequestMapping(value = "/user/userdoImport", method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult userdoImport(MultipartFile file) {

@@ -21,9 +21,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import cn.lastwhisper.core.annotation.LogAnno;
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
-import cn.lastwhisper.core.util.EasyUIOptionalTreeNode;
-import cn.lastwhisper.core.util.GlobalResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIOptionalTreeNode;
+import cn.lastwhisper.modular.vo.GlobalResult;
 import cn.lastwhisper.modular.mapper.MenuMapper;
 import cn.lastwhisper.modular.mapper.RoleMapper;
 import cn.lastwhisper.modular.pojo.Menu;
@@ -73,7 +73,6 @@ public class RoleServiceImpl implements RoleService {
 		return list;
 	}
 
-	@LogAnno(operateType = "删除角色")
 	@Override
 	public GlobalResult updateRole(Role role) {
 		try {
@@ -89,7 +88,6 @@ public class RoleServiceImpl implements RoleService {
 		return new GlobalResult(400, "角色信息更新失败", null);
 	}
 
-	@LogAnno(operateType = "添加角色")
 	@Override
 	public GlobalResult addRole(Role role) {
 		if (role != null) {
@@ -110,7 +108,7 @@ public class RoleServiceImpl implements RoleService {
 		result.setTotal(list.size());
 		return result;
 	}
-	@LogAnno(operateType = "删除角色")
+
 	@Override
 	public GlobalResult deleteRoleById(Integer uuid) {
 		if (uuid == null) {
@@ -161,7 +159,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 
-	@LogAnno(operateType = "更新角色对应权限菜单")
 	@Override
 	public GlobalResult updateRoleMenu(Integer roleuuid, String checkedIds) {
 		Jedis jedis = jedisPool.getResource();

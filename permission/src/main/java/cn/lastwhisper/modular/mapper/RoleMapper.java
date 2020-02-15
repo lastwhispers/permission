@@ -1,11 +1,3 @@
-/**  
- * @Title:  RoleMapper.java   
- * @Package cn.lastwhisper.mapper   
- * @Description: TODO(用一句话描述该文件做什么)
- * @author: 最后的轻语_dd43     
- * @date:   2019年4月6日 下午2:35:46   
- * @version V1.0 
- */
 package cn.lastwhisper.modular.mapper;
 
 import java.util.List;

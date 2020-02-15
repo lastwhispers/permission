@@ -25,9 +25,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import cn.lastwhisper.core.annotation.LogAnno;
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
-import cn.lastwhisper.core.util.EasyUIOptionalTreeNode;
-import cn.lastwhisper.core.util.GlobalResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIOptionalTreeNode;
+import cn.lastwhisper.modular.vo.GlobalResult;
 import cn.lastwhisper.modular.mapper.RoleMapper;
 import cn.lastwhisper.modular.mapper.UserMapper;
 import cn.lastwhisper.modular.pojo.Role;
@@ -47,15 +47,12 @@ import redis.clients.jedis.JedisPool;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private int hashIterations = 2;
 	@Autowired
 	private UserMapper userMapper;
 
 	@Autowired
 	private RoleMapper roleMapper;
-//	@Autowired
-//	private Jedis jedis;
-	
+
 	@Autowired
 	private JedisPool jedisPool;
 
@@ -66,8 +63,7 @@ public class UserServiceImpl implements UserService {
 		user_pwd = encrypt(user_pwd, user_code);
 		System.out.println(user_pwd);
 		// 获取数据库用户信息
-		User userinfo = userMapper.selectUserBycodeAndpwd(user_code, user_pwd);
-		return userinfo;
+		return userMapper.selectUserBycodeAndpwd(user_code, user_pwd);
 	}
 
 	/**
@@ -75,14 +71,14 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 * @param source 密码
 	 * @param salt   账号
-	 * @return
 	 */
 	private String encrypt(String source, String salt) {
+		int hashIterations = 2;
 		Md5Hash md5 = new Md5Hash(source, salt, hashIterations);
 		return md5.toString();
 	}
 
-	@LogAnno(operateType = "添加用户")
+
 	@RequiresPermissions("用户管理")
 	@Override
 	public GlobalResult addUser(User user) {
@@ -104,7 +100,6 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@LogAnno(operateType = "更新用户信息")
 	@RequiresPermissions("用户管理")
 	@Override
 	public GlobalResult updateUser(User user) {
@@ -126,12 +121,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@LogAnno(operateType = "删除用户信息")
 	@RequiresPermissions("用户管理")
 	@Override
 	public GlobalResult deleteUser(Integer user_id) {
-		Jedis jedis = jedisPool.getResource();
-		try {
+		try (Jedis jedis = jedisPool.getResource()) {
 			if (user_id == null) {
 				return new GlobalResult(400, "用户id为空，添加失败！", 400);
 			}
@@ -145,9 +138,7 @@ public class UserServiceImpl implements UserService {
 				jedis.del("menusEasyui_" + user_id);
 				jedis.del("menusList_" + user_id);
 				return new GlobalResult(200, "用户删除成功", null);
-			} 
-		} finally {
-			if(jedis!=null)jedis.close();
+			}
 		}
 	}
 
@@ -166,8 +157,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	@Override
 	public List<User> findUserName(String q) {
-		List<User> list = userMapper.selectUserName(q);
-		return list;
+		return userMapper.selectUserName(q);
 	}
 
 	@LogAnno(operateType = "更新用户密码")
@@ -210,7 +200,7 @@ public class UserServiceImpl implements UserService {
 			t1.setText(role.getName());
 			// 如果用户拥有这个角色，设为true
 			for (Role userRole : userRoleList) {
-				if (userRole.getUuid() == role.getUuid()) {
+				if (userRole.getUuid().equals(role.getUuid())) {
 					t1.setChecked(true);
 				}
 			}
@@ -228,8 +218,7 @@ public class UserServiceImpl implements UserService {
 	@LogAnno(operateType = "更新用户对应角色")
 	@Override
 	public GlobalResult updateUserRole(Integer user_id, String checkedIds) {
-		Jedis jedis = jedisPool.getResource();
-		try {
+		try (Jedis jedis = jedisPool.getResource()) {
 			// 先删除用户下的所有角色
 			userMapper.deleteUserRole(user_id);
 			if (checkedIds != null) {
@@ -245,8 +234,6 @@ public class UserServiceImpl implements UserService {
 			System.out.println("更新用户对应的角色 ，清除缓存");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
-			if (jedis!=null)jedis.close();
 		}
 		return GlobalResult.build(200, "保存成功");
 	}

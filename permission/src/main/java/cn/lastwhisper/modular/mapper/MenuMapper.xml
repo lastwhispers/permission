@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lastwhisper.modular.mapper.MenuMapper">
 <!-- 初始化菜单树 -->
-    <resultMap type="cn.lastwhisper.core.util.Tree" id="menuTree">
+    <resultMap type="cn.lastwhisper.modular.vo.Tree" id="menuTree">
         <id column="menuid" property="id" javaType="java.lang.String" />
         <result column="menuname" property="text" javaType="java.lang.String" />
         <collection column="menuid" property="children" select="selectChild"/>

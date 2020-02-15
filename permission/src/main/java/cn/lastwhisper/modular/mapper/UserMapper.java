@@ -45,7 +45,6 @@ public interface UserMapper {
 	 * 
 	 * @Title: selectUserRole
 	 * @Description: 根据userid获取用户对应的角色,例如user_id=221
-	 * @param userId
 	 * @return List<Role>
 	 * @author gj
 	 * @date 2019年2月16日下午2:50:20
@@ -95,8 +94,6 @@ public interface UserMapper {
 	 * @Title: updatePwd   
 	 * @Description: 更新密码
 	 * @author: 最后的轻语_dd43    
-	 * @param oldPwd
-	 * @param newPwd
 	 * @return
 	 */
 	public Integer updatePwdById(@Param("user_id") Integer user_id,@Param("user_pwd") String user_pwd);

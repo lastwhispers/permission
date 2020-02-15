@@ -1,16 +1,9 @@
-/**  
- * @Title:  RoleController.java   
- * @Package cn.lastwhisper.controller   
- * @Description: TODO(用一句话描述该文件做什么)
- * @author: 最后的轻语_dd43     
- * @date:   2019年4月6日 下午3:00:04   
- * @version V1.0 
- */
 package cn.lastwhisper.modular.controller;
 
 
 import java.util.List;
 
+import cn.lastwhisper.core.annotation.LogAnno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
-import cn.lastwhisper.core.util.EasyUIOptionalTreeNode;
-import cn.lastwhisper.core.util.GlobalResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIOptionalTreeNode;
+import cn.lastwhisper.modular.vo.GlobalResult;
 import cn.lastwhisper.modular.pojo.Role;
 import cn.lastwhisper.modular.service.RoleService;
 
@@ -76,6 +69,7 @@ public class RoleController {
 	* @author 最后的轻语_dd43
 	* @date 2019年2月14日下午8:19:07
 	 */
+	@LogAnno(operateType = "更新角色")
 	@RequestMapping(value = "/role/roleupdate" , method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult updateRole(Role role) {
@@ -91,13 +85,19 @@ public class RoleController {
 	* @author 最后的轻语_dd43
 	* @date 2019年2月15日上午11:52:43
 	 */
+	@LogAnno(operateType = "添加角色 ")
 	@RequestMapping(value = "/role/roleadd" , method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult addRole(Role role) {
 		GlobalResult result = roleService.addRole(role);
 		return result;
 	}
-	
+
+	/**
+	 * 删除角色
+	 * @param role 角色
+	 */
+	@LogAnno(operateType = "删除角色")
 	@RequestMapping(value = "/role/roledelete" , method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult deleteRole(Role role) {
@@ -143,6 +143,7 @@ public class RoleController {
 	* @author 最后的轻语_dd43
 	* @date 2019年2月16日下午8:16:05
 	 */
+	@LogAnno(operateType = "更新角色权限菜单")
 	@RequestMapping(value = "/role/updateRoleMenu" , method = RequestMethod.POST)
 	@ResponseBody
 	public GlobalResult updateRoleMenu(

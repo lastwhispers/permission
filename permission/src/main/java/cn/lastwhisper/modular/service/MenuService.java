@@ -10,8 +10,8 @@ package cn.lastwhisper.modular.service;
 
 import java.util.List;
 
-import cn.lastwhisper.core.util.GlobalResult;
-import cn.lastwhisper.core.util.Tree;
+import cn.lastwhisper.modular.vo.GlobalResult;
+import cn.lastwhisper.modular.vo.Tree;
 import cn.lastwhisper.modular.pojo.Menu;
 
 /**   

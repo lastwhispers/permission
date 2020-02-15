@@ -1,17 +1,8 @@
-/**  
- * @Title:  MenuServiceImpl.java   
- * @Package cn.lastwhisper.service.impl   
- * @Description: TODO(用一句话描述该文件做什么)
- * @author: 最后的轻语_dd43     
- * @date:   2019年4月6日 下午5:10:31   
- * @version V1.0 
- */
+
 package cn.lastwhisper.modular.service.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 
 import cn.lastwhisper.core.annotation.LogAnno;
-import cn.lastwhisper.core.util.GlobalResult;
-import cn.lastwhisper.core.util.Tree;
+import cn.lastwhisper.modular.vo.GlobalResult;
+import cn.lastwhisper.modular.vo.Tree;
 import cn.lastwhisper.modular.mapper.MenuMapper;
 import cn.lastwhisper.modular.pojo.Menu;
 import cn.lastwhisper.modular.service.MenuService;
@@ -47,16 +38,13 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private MenuMapper menuMapper;
 
-//	@Autowired
-//	private Jedis jedis;
 	@Autowired
 	private JedisPool jedisPool;
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	@Override
 	public List<Tree> findMenuList() {
-		List<Tree> tree = menuMapper.selectMenuList();
-		return tree;
+		return menuMapper.selectMenuList();
 	}
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
@@ -65,7 +53,6 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.selectMenuById(menuid);
 	}
 
-	@LogAnno(operateType = "添加权限菜单")
 	@Override
 	public GlobalResult addMenu(Menu menu) {
 		// 设置默认添加的菜单的状态为使用中
@@ -76,7 +63,7 @@ public class MenuServiceImpl implements MenuService {
 			m.setMenuid(menu.getPid());
 			m.setIs_parent(1);
 			if (200 == updateMenuById(m).getStatus()) {
-				batchDel("menus");
+				batchDel();
 				return new GlobalResult(200, "数据添加成功", null);
 			} else {
 				return new GlobalResult(400, "数据添加失败", null);
@@ -94,12 +81,11 @@ public class MenuServiceImpl implements MenuService {
 	 * @param menuid 主键
 	 * @return
 	 */
-	@LogAnno(operateType = "删除权限菜单")
 	@Override
 	public GlobalResult deleteMenuById(String menuid) {
 		Integer deleteCount = menuMapper.deleteMenuById(menuid);
 		if (deleteCount != null && deleteCount > 0) {
-			batchDel("menus");
+			batchDel();
 			return new GlobalResult(200, "数据删除成功", null);
 		} else {
 			return new GlobalResult(400, "数据删除失败", null);
@@ -112,12 +98,11 @@ public class MenuServiceImpl implements MenuService {
 	 * @param menu
 	 * @return
 	 */
-	@LogAnno(operateType = "更新权限菜单")
 	@Override
 	public GlobalResult updateMenuById(Menu menu) {
 		Integer updateCount = menuMapper.updateMenuById(menu);
 		if (updateCount != null && updateCount > 0) {
-			batchDel("menus");
+			batchDel();
 			return new GlobalResult(200, "数据修改成功", null);
 		} else {
 			return new GlobalResult(400, "数据修改失败", null);
@@ -127,21 +112,12 @@ public class MenuServiceImpl implements MenuService {
 	/**
 	 * 根据key前缀批量删除缓存
 	 * 
-	 * @param key
 	 * @return
 	 */
-	private void batchDel(String key) {
-		Jedis jedis = jedisPool.getResource();
-		try {
-			Set<String> set = jedis.keys(key + "*");
-			Iterator<String> it = set.iterator();
-			while (it.hasNext()) {
-				String keyStr = it.next();
-				jedis.del(keyStr);
-			}
-		} catch (Exception e) {
-		}finally {
-			if(jedis!=null)jedis.close();
+	private void batchDel() {
+		try (Jedis jedis = jedisPool.getResource()) {
+			jedis.flushAll();
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -227,7 +203,6 @@ public class MenuServiceImpl implements MenuService {
 		List<Menu> menuList;
 		try {
 			String menuListJson = jedis.get("menusList_" + userid);
-			menuList = null;
 			if (menuListJson == null) {
 				// 1.从数据库中查出来，放入缓存中
 				menuList = menuMapper.selectMenuByUserid(userid);

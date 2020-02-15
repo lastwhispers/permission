@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import cn.lastwhisper.core.util.EasyUIDataGridResult;
+import cn.lastwhisper.modular.vo.EasyUIDataGridResult;
 import cn.lastwhisper.modular.mapper.LogMapper;
 import cn.lastwhisper.modular.pojo.Log;
 import cn.lastwhisper.modular.service.LogService;
@@ -32,7 +32,7 @@ public class LogServiceImpl implements LogService {
 
 	@Override
 	public boolean addLog(Log log) throws SQLException {
-		return logMapper.insertLog(log) > 0 ? true : false;
+		return logMapper.insertLog(log) > 0;
 	}
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)

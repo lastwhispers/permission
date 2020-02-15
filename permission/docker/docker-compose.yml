@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  permission:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    links:
+      - redis
+      - mysql
+
+  redis:
+    image: hub.c.163.com/library/redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - my-bridge
+
+  mysql:
+    image: hub.c.163.com/library/mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 4710054177.gg
+      MYSQL_DATABASE: permission
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - my-bridge
+
+volumes:
+  mysql-data:
+
+networks:
+  my-bridge:
+    driver: bridge

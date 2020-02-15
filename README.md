@@ -144,14 +144,33 @@
 # 4. 日志系统设计思路
 
 使用aop环绕通知记录方法的操作。
-参考：https://www.cnblogs.com/gj-blog/p/10803600.html
+参考：https://www.jianshu.com/p/59ca84fadbaf
 
 # 5. 如何运行项目
 
-**第一步：启动redis**
+## 5.1 本地运行
+
+**第一步：启动redis和mysql**
 **第二步：导入sql文件**
 **第三步：导入项目，修改db.properties中的数据库账号密码**
 **第四步：启动maven项目**
 
- 
- 
+## 5.2 Dockerfile
+提前打好war，或者重写Dockerfile命令构建war
+```shell script
+# 构建镜像
+docker build -t gj/permission .
+# 运行
+docker run -d -p 8081:8080 gj/permission
+```
+
+## 5.3 docker-compose
+提前打好war
+```shell script
+# war、dockerfile、docker-compose在同一目录
+docker-compose up -d
+# 查看镜像
+docker-compose ps
+# 移除镜像
+docker-compose down
+```

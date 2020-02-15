@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lastwhisper.modular.mapper.RoleMapper">
+	<!-- 查询 -->
+	<!-- 查询所有角色role，使用name模糊查询、enabl精准查询 -->
+	<select id="selectRolelistByPage" parameterType="role"
+		resultType="role">
+		select uuid,name from role
+		<if test='name!=null'>
+			where
+			<if test='name!=null'>
+				name LIKE CONCAT('%',#{name},'%' )
+			</if>
+		</if>
+	</select>
+	<!-- 查询该角色id（roleuuid）下的菜单id（menuuid） -->
+	<select id="selectRoleMenuidByRoleid" resultType="string">
+		select
+		role_menu.menuuuid from role_menu WHERE
+		role_menu.roleuuid=#{roleuuid}
+	</select>
+	<!-- 查询所有角色的uuid、name -->
+	<select id="selectRoleList" resultType="role">
+		SELECT uuid,name from role
+	</select>
+	<select id="selectUseridByRoleuuid" resultType="int">
+		SELECT userid
+		FROM user_role WHERE roleuuid = #{roleuuid}
+	</select>
+	
+	<!-- 根据角色模糊查询角色 自动补全 -->
+	<select id="selectRoleName"
+		parameterType="java.lang.String" resultType="role">
+		select name from role
+		where
+		name like CONCAT('%',#{name},'%' )
+	</select>
+	<!-- 查询结束 -->
+
+	<!-- 新增开始 -->
+	
+	<!-- 新增角色 -->
+	<insert id="insertRole" parameterType="role">
+		insert into role VALUES(0,#{name})
+	</insert>
+	<!-- 新增角色权限菜单关系 -->
+	<insert id="insertRolemenu">
+		INSERT INTO role_menu VALUES(#{menuuuid},#{roleuuid})
+	</insert>
+	
+	<!-- 新增结束 -->
+	<!-- 更新开始 -->
+	<!-- 根据uuid更新角色 -->
+	<update id="updateRole" parameterType="role" >
+		UPDATE role
+		SET NAME = #{name}
+		WHERE
+		uuid = #{uuid}
+	</update>
+	<!-- 更新结束 -->
+
+	<!-- 删除开始 -->
+	
+	<delete id="deleteRoleById">
+		delete from role where uuid = #{uuid}
+	</delete>
+	
+	<!-- 根据roleuuid删除拥有的角色信息 -->
+	<delete id="deleteMenuidByRoleid">
+		delete from role_menu where roleuuid = #{roleuuid}
+	</delete>
+	<!-- 删除结束 -->
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lastwhisper.modular.mapper.LogMapper">
+
+	<select id="selectLoglistByPage" parameterType="log"
+		resultType="log">
+		select * from log 
+		<if test="operateor!=null">
+			where 
+			operateor like CONCAT('%',#{operateor},'%' )
+		</if>
+	</select>
+
+	<!-- 根据操作人模糊查询操作人 自动补全 -->
+	<select id="selectLogOperateor" parameterType="java.lang.String"
+		resultType="log">
+		select distinct operateor from log 
+		where 
+		operateor like CONCAT('%',#{operateor},'%' )
+	</select>
+
+	<insert id="insertLog" parameterType="int">
+		insert into log
+		values(0
+		<if test='operateor!=null'>
+			,#{operateor}
+		</if>
+		<if test='operateor==null'>
+			,null
+		</if>
+		<if test='operatetype!=null'>
+			,#{operatetype}
+		</if>
+		<if test='operatetype==null'>
+			,null
+		</if>
+		<if test='operatedate!=null'>
+			,#{operatedate}
+		</if>
+		<if test='operatedate==null'>
+			,null
+		</if>
+		<if test='operateresult!=null'>
+			,#{operateresult}
+		</if>
+		<if test='operateresult==null'>
+			,null
+		</if>
+		<if test='ip!=null'>
+			,#{ip}
+		</if>
+		<if test='ip==null'>
+			,null
+		</if>
+		);
+	</insert>
+</mapper>

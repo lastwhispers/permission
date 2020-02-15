@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lastwhisper.modular.mapper.MenuMapper">
+<!-- 初始化菜单树 -->
+    <resultMap type="cn.lastwhisper.modular.vo.Tree" id="menuTree">
+        <id column="menuid" property="id" javaType="java.lang.String" />
+        <result column="menuname" property="text" javaType="java.lang.String" />
+        <collection column="menuid" property="children" select="selectChild"/>
+    </resultMap>
+
+<!-- 查找一级菜单 -->
+	<!-- 先查询菜单根级目录 -->
+	<!-- 这里的返回结果必须为resultMap，并且值为上面构建的resultMap的id的值 -->
+	<select id="selectMenuList" resultMap="menuTree">
+		select * from menu where menuid='0'
+	</select>
+<!-- 查询二级菜单 -->
+	<select id="selectChild" resultMap="menuTree">
+		select * from menu where pid = #{menuid}
+	</select>
+	
+	<!-- 查询所有菜单的id、name -->
+	<select id="selectMenuIdName" resultType="menu">
+		SELECT menuid,menuname FROM menu where pid = #{pid} 
+	</select>
+	
+	<!-- 查询所有菜单的所有属性 -->
+	<select id="selectMenu" resultType="menu">
+		SELECT menuid,menuname,url,icon,pid FROM menu where pid = #{pid} 
+	</select>
+	
+	<!-- 根据userid加载对应菜单 -->
+	<select id="selectMenuByUserid" resultType="menu">
+		SELECT 
+			DISTINCT menu.menuid,menu.menuname,menu.url,menu.icon,menu.pid
+		FROM 
+			user_role,
+			role,
+			role_menu,
+			menu  
+		WHERE 
+			user_role.roleuuid = role.uuid  
+			AND role.uuid = role_menu.roleuuid  
+			AND role_menu.menuuuid = menu.menuid 
+			AND user_role.userid = #{userid}
+	</select>
+<!-- 查询菜单结束 -->
+
+<!-- 根据id查询菜单 -->
+	<select id="selectMenuById" parameterType="java.lang.String" resultType="menu">
+		select * from menu where menuid = #{menuid}
+	</select>
+<!-- 插入数据 -->
+	<insert id="insertMenu" parameterType="menu">
+		insert into menu values(
+		<if test='menuid != null and menuid != ""'>
+			#{menuid}
+		</if>
+		<if test='menuid == null or menuid == ""'>
+			null
+		</if>
+		<if test='menuname != null and menuname != ""'>
+			,#{menuname}
+		</if>
+		<if test='menuname == null or menuname == ""'>
+			,null
+		</if>
+		<if test='url != null and url != "" '>
+			,#{url}
+		</if>
+		<if test='url == null or url == ""'>
+			,null
+		</if>
+		<if test='icon != null and icon != ""'>
+			,#{icon}
+		</if>
+		<if test='icon == null or icon == ""'>
+			,null
+		</if>
+		<if test='pid != null and pid != ""'>
+			,#{pid}
+		</if>
+		<if test='pid == null or pid == ""'>
+			,null
+		</if>
+		<if test='is_parent != null'>
+			,#{is_parent}
+		</if>
+		<if test='is_parent == null'>
+			,null
+		</if>
+		);
+	</insert>
+<!-- 	根据id删除数据-->
+	<update id="deleteMenuById">
+		delete from menu where menuid = #{0}
+	</update>
+<!-- 	根据id修改数据 -->
+	<update id="updateMenuById" parameterType="menu">
+		update menu
+		<trim prefix="set" suffixOverrides="," suffix="where menuid = #{menuid}">
+			<if test='menuname != null and menuname != ""'>
+				menuname = #{menuname},
+			</if>
+			<if test='url != null and url != "" '>
+				url = #{url},
+			</if>
+			<if test='icon != null and icon != ""'>
+				icon = #{icon},
+			</if>
+			<if test='pid != null and pid != ""'>
+				pid = #{pid},
+			</if>
+			<if test='is_parent != null'>
+				is_parent = #{is_parent}
+			</if>
+		</trim>
+	</update>
+</mapper>

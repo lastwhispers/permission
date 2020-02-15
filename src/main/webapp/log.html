@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>角色管理</title>
+<link rel="stylesheet" type="text/css"
+	href="ui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+<script type="text/javascript" src="ui/jquery.min.js"></script>
+<script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="ui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src='ui/jquery.serializejson.min.js'></script>
+<script type="text/javascript" src="js/crud.js"></script>
+<script type="text/javascript" src="js/search.js"></script>
+<script type="text/javascript" src="ui/date.js"></script>
+<script type="text/javascript">
+	//用于search.js自动补全
+	var _url = 'log/searchLogOperateor';
+	var _value = 'operateor';
+	//用于crud.js的esayui初始参数
+	var name = "log/log";
+	var title = '日志管理';
+	var idField = 'id';
+	var columns = [ [ {
+		field : 'operateor',
+		title : '操作人',
+		width : 100
+	}, {
+		field : 'operatetype',
+		title : '操作',
+		width : 100
+	}, {
+		field : 'operatedate',
+		title : '操作日期',
+		width : 100,
+		formatter : function(value) {
+			return new Date(value).Format("yyyy-MM-dd hh:mm:ss");
+		}
+	}, {
+		field : 'operateresult',
+		title : '操作结果',
+		width : 100
+	} , {
+		field : 'ip',
+		title : 'ip地址',
+		width : 100
+	} ] ];
+</script>
+</head>
+<body class="easyui-layout">
+	<!--搜索区  -->
+	<div data-options="region:'north',title:'查询'"
+		style="padding: 4px; background-color: #eee; height: 80px">
+		<form id="searchForm">
+			<table cellpadding="5">
+				<tr>
+					<td>操作人 ：</td>
+					<td><input name="name" class="easyui-combobox" id="inputtable" /></td>
+					<td><a class="easyui-linkbutton"
+						data-options="iconCls:'icon-search'" id="btnSearch">查询</a></td>
+					<td><a class="easyui-linkbutton"
+						data-options="iconCls:'icon-remove'" id="btnReset">重置</a></td>
+			</table>
+		</form>
+	</div>
+	<!-- 数据表格区 -->
+	<div data-options="region:'center',collapsible:true,split:true"
+		style="width: 600px;">
+		<table id="grid"></table>
+	</div>
+</body>
+</html>

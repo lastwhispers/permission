@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lastwhisper.modular.mapper.UserMapper">
+	<!-- 根据user_code和user_pwd查询user表 -->
+	<select id="selectUserBycodeAndpwd"
+		parameterType="java.lang.String" resultType="user">
+		select * from user
+		where
+		user_code=#{user_code} and
+		user_pwd=#{user_pwd}
+	</select>
+
+	<select id="selectUserlistByPage" parameterType="user"
+		resultType="user">
+		SELECT
+		*
+		FROM
+		user
+		<if test="user_name!=null">
+			where
+			user_name like '%${user_name}%'
+		</if>
+	</select>
+
+	<!-- 根据用户名模糊查询用户 自动补全 -->
+	<select id="selectUserName" parameterType="java.lang.String"
+		resultType="user">
+		select user_name from user
+		where
+		user_name like concat('%', #{user_name}, '%') 
+	</select>
+	<!-- 查询用户对应的角色id -->
+	<select id="selectUserRole" resultType="role">
+		select uuid from
+		user_role,role where user_role.userid=#{user_id} and
+		user_role.roleuuid = role.uuid;
+	</select>
+	<!-- 查询账号对应的用户 -->
+	<select id="selectUserByUserCode"
+		parameterType="java.lang.String" resultType="user">
+		select
+		user_code,user_name,user_birthday from user
+		where
+		user_code =
+		#{user_code}
+	</select>
+
+	<!-- 添加用户 -->
+	<insert id="insertUser" parameterType="user">
+		insert into user
+		values
+		(0
+		<if test='user_code!=null'>
+			,#{user_code}
+		</if>
+		<if test='user_code==null'>
+			,null
+		</if>
+		<if test='user_name!=null'>
+			,#{user_name}
+		</if>
+		<if test='user_name==null'>
+			,null
+		</if>
+		<if test='user_pwd!=null'>
+			,#{user_pwd}
+		</if>
+		<if test='user_pwd==null'>
+			,null
+		</if>
+		<if test='user_birthday!=null'>
+			,#{user_birthday}
+		</if>
+		<if test='user_birthday==null'>
+			,null
+		</if>
+		);
+	</insert>
+	<!-- 给用户添加对应角色信息 -->
+	<insert id="insertUserRole">
+		insert into user_role VALUES(#{user_id},#{roleuuid})
+	</insert>
+
+	<!-- 更新用户信息根据与用户编号 -->
+	<update id="updateUser" parameterType="user">
+		update user set
+		<if test='user_code!=null'>
+			user_code = #{user_code}
+		</if>
+		<if test='user_name!=null'>
+			,user_name = #{user_name}
+		</if>
+		<if test='user_pwd!=null'>
+			,user_pwd = #{user_pwd}
+		</if>
+		<if test='user_birthday!=null'>
+			,user_birthday = #{user_birthday}
+		</if>
+		where
+		<if test='user_id!=null'>
+			user_id = #{user_id}
+		</if>
+	</update>
+
+	<!-- 更新用户密码 -->
+	<update id="updatePwdById" parameterType="user">
+		update user set
+		<if test='user_pwd!=null'>
+			user_pwd = #{user_pwd}
+		</if>
+		where
+		<if test='user_id!=null'>
+			user_id = #{user_id}
+		</if>
+	</update>
+
+	<!-- 更新用户信息根据账号 -->
+	<update id="updateUserByUserCode" parameterType="user">
+		update user set
+		<if test='user_name!=null'>
+			user_name = #{user_name}
+		</if>
+		<if test='user_pwd!=null'>
+			,user_pwd = #{user_pwd}
+		</if>
+		<if test='user_birthday!=null'>
+			,user_birthday = #{user_birthday}
+		</if>
+		where
+		<if test='user_code!=null'>
+			user_code = #{user_code}
+		</if>
+	</update>
+
+	<!-- 根据主键删除用户 -->
+	<delete id="deleteUserById">
+		delete from user where
+		user_id=#{user_id}
+	</delete>
+	<!-- 根据用户id删除对应角色 -->
+	<delete id="deleteUserRole">
+		delete from user_role where userid = #{user_id}
+	</delete>
+</mapper>

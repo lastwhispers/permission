@@ -1,0 +1,308 @@
+/* CSS Document */
+/* Download by http://www.codefans.net
+* Basic Cascading Style Sheet
+* Intructions: none
+* Version: 1.0
+* Updated: 2013-03-12
+* Author: Zhang Ziyang
+* Contact:
+* QQ:1060927929
+* Email:zzy85620987@163.com
+*/
+
+@charset "utf-8";
+/***********************CSS RESET*********************/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,   
+form,fieldset,input,textarea,p,blockquote,th,td {   
+    padding: 0;   
+    margin: 0;   
+}   
+table {   
+    border-collapse: collapse;   
+    border-spacing: 0;   
+}   
+fieldset,img {   
+    border: 0;   
+}   
+address,caption,cite,code,dfn,em,strong,th,var {   
+    font-weight: normal;   
+    font-style: normal;   
+}   
+ol,ul {   
+    list-style: none;   
+}   
+caption,th {   
+    text-align: left;
+    text-indent:10px;
+}   
+h1,h2,h3,h4,h5,h6 {   
+    font-weight: normal;   
+    font-size: 100%;   
+}   
+q:before,q:after {   
+    content:'';   
+}   
+abbr,acronym { border: 0;   
+}  
+
+
+.clear{
+    clear:both;
+}
+
+body{
+    background:url(../../images/linen-lt.png);
+    font:12px "microsoft yahei";
+    color: #565656;
+}
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+     background-color: transparent;
+                padding: 0;  
+                border: 0;
+}
+
+h1.title {
+    font: 32px "microsoft yahei";
+    margin:10px 20px;
+    color:#666;
+}
+/* Forms */
+input[type=text],
+input[type=password],
+textarea {
+    background: #fafafa;
+/*    -moz-box-shadow: inset 1px 1px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: inset 1px 1px 10px rgba(0,0,0,0.1);
+    box-shadow: inset 1px 1px 10px rgba(0,0,0,0.1);*/
+    border: 1px solid #ddd;
+    color: #888;
+    outline:none;
+}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-button:vertical{display:none}
+::-webkit-scrollbar-track:vertical{background-color:black}
+::-webkit-scrollbar-track-piece{background: #FDFDFD;}
+::-webkit-scrollbar-thumb:vertical{background-color:#8E8E8E;border-radius:5px}
+::-webkit-scrollbar-thumb:vertical:hover{background-color:#3B3B3B}
+::-webkit-scrollbar-corner:vertical{background-color:#535353}
+::-webkit-scrollbar-resizer:vertical{background-color:#FF6E00}
+
+@-webkit-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-moz-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-ms-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-o-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+html{
+	height: 100%;
+}
+body{
+   background:url(../images/cloud.png) 0 bottom repeat-x  #049ec4;
+  -webkit-animation: animate-cloud 20s linear infinite;
+  -moz-animation: animate-cloud 20s linear infinite;
+  -ms-animation: animate-cloud 20s linear infinite;
+  -o-animation: animate-cloud 20s linear infinite;
+  animation: animate-cloud 20s linear infinite;
+  width: 100%;
+  height: auto;
+}
+
+.signup_container{
+	width:560px;
+	height: auto;
+	margin:9% auto 0;
+	padding-bottom: 20px;
+	background: #EDEDED;
+	text-align: center;
+	border-radius: 8px;
+	box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+	-webkit-user-select:none;
+	-ms-user-select:none;
+}
+
+
+h1.signup_title{
+	width: 100%;
+	height:70px;
+	font: 26px/1.4 "microsoft yahei";
+	text-align: center;
+	text-indent:0px;
+	letter-spacing:3px;
+	color:#FDFDFD;
+	line-height: 70px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	background-color: #003399;
+}
+
+.signup_container img{
+	margin:20px 0 0;
+}
+
+.signup_container .copyright{
+	margin:20px 0;
+	color: #ABABAB;
+}
+
+.signup_forms{
+	width:260px;
+	margin:30px auto 0;
+	padding: 0;
+	text-align: left;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.36),0 1px 0 rgba(255,255,255,0.15);
+}
+
+.signup_forms .form_row {
+	position:relative;
+	border-top:1px solid #CCC;
+	border-top:1px solid rgba(0,0,0,0.12);
+}
+
+.signup_forms label {
+	display:none
+}
+
+.signup_forms input{
+	width:100%;
+	padding: 10px 0;
+	text-indent: 40px;
+	display:block;
+	margin:0;
+	border:0;
+	outline: none;
+	font:bold 14px/1.4 "microsoft yahei";
+	line-height:25px;
+	color: #888;
+}
+
+
+#signup_name{
+	background: url('../images/i1.png') no-repeat 9px 15px;
+}
+#signup_password{
+	background: url('../images/i2.png') no-repeat 9px 15px;
+}
+#signup_select{
+   background: url('../images/i3.png') no-repeat 9px 12px;
+}
+
+
+#d{
+	position: absolute;
+	right: 10px;
+	top: -14px;
+	cursor: pointer;
+}
+#userInfo {margin-top:10px}
+#admin{
+	margin-top:32px;
+	background: #FFF;
+	padding: 5px;
+}
+
+
+.form_row ul{
+	background: #EDEDED;
+	width: 216px;
+	position: absolute;
+	display:none;
+	border:1px solid #CCC;
+	border-top: none;
+	cursor: pointer;
+}
+
+.form_row li{
+	width: 100%;
+	padding: 6px 0;
+	line-height: 25px;
+	text-indent:30px;
+}
+
+.form_row li:hover{
+	background:#19B4EA;
+	color: #FFF;
+}
+
+.login-btn-set{
+	width:260px;
+	height: auto;
+	overflow: hidden;
+	margin:10px auto;
+}
+.login-btn{
+	display: block;
+	float: right;
+	background: url(../images/login_btn.png) no-repeat;
+	width: 157px;
+	height:41px;
+}
+
+.login-btn:hover{
+	background-position: 0 -48px;
+}
+
+.login-btn:active{
+	background-position: 0 -96px;
+}
+
+.login-btn-set .rem{
+	display: block;
+	float: left;
+	margin:15px 6px;
+	background: url(../images/remember.png) no-repeat;
+	background-position: -2px -23px;	
+	width:90px;
+	height: 22px;
+	cursor: pointer;
+}
+.login-btn-set .rem.selected{
+	background-position: 0 0;
+}
+
+.tip{
+	background: url(../images/tip.png) no-repeat;
+	width:32px;
+	height:32px;
+	position: absolute;
+	right: -36px;
+	top:5px;
+}
+
+.tip.ok{
+	background-position: 0 0;
+}
+
+.tip.error{
+	background-position: 0 -34px;
+}

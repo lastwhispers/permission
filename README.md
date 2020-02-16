@@ -1,5 +1,5 @@
 >该项目源码地址：https://github.com/ggb2312/permission
-项目在线地址：http://47.100.54.177:8080/permission/login.html
+项目在线地址：http://39.105.49.50:8080/permission/login.html
 初始用户：  
 系统管理员：admin/admin   
 经理：manager/manager  

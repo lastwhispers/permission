@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    networks:
+      - my-bridge
     links:
       - redis
       - mysql
@@ -14,19 +16,20 @@ services:
   redis:
     image: hub.c.163.com/library/redis:latest
     ports:
-      - "6379:6379"
+      - "63790:6379"
     networks:
       - my-bridge
 
   mysql:
     image: hub.c.163.com/library/mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: 4710054177.gg
-      MYSQL_DATABASE: permission
+      MYSQL_ROOT_PASSWORD: 391054950.gg
     ports:
-      - "3306:3306"
+      - "33060:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - /root/mysql/db:/var/lib/mysql
+      - /root/mysql/conf/my.cnf:/etc/my.cnf
+      - /root/mysql/init:/docker-entrypoint-initdb.d/
     networks:
       - my-bridge
 

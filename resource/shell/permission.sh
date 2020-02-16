@@ -1,6 +1,6 @@
 #!/bin/bash
 # 还原数据库
-mysql -uroot -proot -P 3306 < permission.sql
+mysql -uroot -proot -P 3306 < reset.sql
 
 # 清空redis
 cd /usr/local/redis-5/bin/

@@ -55,10 +55,10 @@ $(function () {
     });
 
     // 定时加载start的弹窗
-    start();
-    interval = window.setInterval(function () {
-        start();
-    }, 7000);
+    // start();
+    // interval = window.setInterval(function () {
+    //     start();
+    // }, 7000);
 
 });
 

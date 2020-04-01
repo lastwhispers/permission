@@ -12,8 +12,8 @@
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-4.2.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 	<!-- 加载配置文件 -->
-	<context:property-placeholder
-		location="classpath:db.properties" />
+<!--	<context:property-placeholder location="classpath:db-local.properties" />-->
+	<context:property-placeholder location="classpath:db.properties" />
 
 	<!-- 注解开发 -->
 	<!-- 自动扫描组件，这里要把controler下面的 controller去除，他们是在spring3-servlet.xml中配置的，如果不去除会影响事务管理的。 -->

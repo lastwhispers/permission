@@ -149,9 +149,10 @@
 # 5. 如何运行项目
 
 ## 5.1 本地运行
+找到resource目录里面有redis和sql文件
 
 **第一步：启动redis和mysql**
-**第二步：导入sql文件**
+**第二步：导入resource/sql/permission.sql文件，不是classpath下面的reset.sql**
 **第三步：导入项目，修改db.properties中的数据库账号密码**
 **第四步：启动maven项目**
 
@@ -174,3 +175,8 @@ docker-compose ps
 # 移除镜像
 docker-compose down
 ```
+
+## 5.4 其他
+
+弹窗在adminjs/index.js的start()方法，可以修改或者关闭
+js/crud.js封装了所有的crud前端的代码

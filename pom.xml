@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Spring版本号 -->
-        <spring.version>4.3.18.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <jackson.version>2.9.10.1</jackson.version>
     </properties>
     <dependencies>
